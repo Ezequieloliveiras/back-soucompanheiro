@@ -20,6 +20,14 @@ const app = express() // invocando o express
 app.use(express.json()) // middleware
 app.use(userRouter)
 
+// const test = async (email, password) => {
+//   const user = await User.findOne({email: email})
+//  const result = await user.comparePassword(password)
+//  console.log(result)
+// }
+
+// test('niraj@email.com', 'niraj134')
+
 
 app.get('/test', (req, res) => {
   res.send('Hello Wolrd!')

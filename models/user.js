@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 
+const bcrypt = require('bcrypt')
+
 const userSchema = new mongoose.Schema({
     
     fullname: {
@@ -17,6 +19,29 @@ const userSchema = new mongoose.Schema({
     avatar: Buffer, // tipo especial de dados que podemos armazenar
 
 })
+
+userSchema.pre('save', function(next) {
+    if(this.isModified('password')){
+        bcrypt.hash(this.password, 8, (err, hash) => {
+            if(err) return next(err)
+
+                this.password = hash
+                next()
+        })
+    }
+})
+
+
+userSchema.methods.comparePassword = async function(password) {
+    if(!password) throw new Error('Password is mission, can not compare!')
+
+        try {
+            const result = await bcrypt.compare(password, this.password)
+            return result
+        } catch (error) {
+            console.log('Erro while comparing password!', error.message)
+        }
+}
 
 userSchema.statics.isThisEmailInUse = async function(email) {
 

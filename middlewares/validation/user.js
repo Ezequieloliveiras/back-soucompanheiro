@@ -6,7 +6,6 @@ exports.validateUserSingUp = [
         .not()
         .isEmpty()
         .withMessage('Name is required!')
-        .not()
         .isString()
         .withMessage('Must be a valid name!')
         .isLength({ min: 3, max: 20 }).
