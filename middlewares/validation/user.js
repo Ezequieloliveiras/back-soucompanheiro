@@ -5,7 +5,7 @@ exports.validateUserSingUp = [
         .trim()
         .not()
         .isEmpty()
-        .withMessage('Name is required!')
+        .withMessage('Name is required! teste')
         .isString()
         .withMessage('Must be a valid name!')
         .isLength({ min: 3, max: 20 }).

@@ -1,47 +1,28 @@
-const express = require('express')
+const express = require('express');
+const cors = require('cors');
+require('dotenv').config();
+require('./models/db');
 
-require('dotenv').config()
-require('./models/db')
+const User = require('./models/user');
+const userRouter = require('./routes/route');
 
-const User = require('./models/user')
-const userRouter = require('./routes/route')
+const app = express(); // Inicializando o express
 
-const app = express() // invocando o express
+app.use(cors()); // Permite todas as origens
+app.use(express.json()); // Middleware para parsear JSON
 
+app.use(userRouter);
 
-// app.use((req, res, next) => {
-//   req.on('data', (chunk) => {
-//     const data = JSON.parse(chunk)
-//     req.body = data
-//     next()
-//   })
-// })
-
-app.use(express.json()) // middleware
-app.use(userRouter)
-
-// const test = async (email, password) => {
-//   const user = await User.findOne({email: email})
-//  const result = await user.comparePassword(password)
-//  console.log(result)
-// }
-
-// test('niraj@email.com', 'niraj134')
-
+const PORT = process.env.PORT || 8002; // Porta definida para 8002
 
 app.get('/test', (req, res) => {
-  res.send('Hello Wolrd!')
-})
+  res.send('Hello World!');
+});
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+  res.json({ success: true, message: 'Welcome to backend zone!' });
+});
 
-app.listen(8000, () => {
-  console.log('port is listening')
-})
-
-
-// node app.js para salvar
-
-//mongodb+srv://quielonliner:<password>@cluster0.ldlzx6g.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+app.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`);
+});

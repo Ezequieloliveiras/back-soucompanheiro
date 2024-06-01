@@ -29,7 +29,7 @@ exports.isAuth = async (req, res, next) => {
 
   
     } else {
-        res.json({success: false, message: 'unauthorized access!'})
+        res.json({success: false, message: 'unauthorized access!está parando aqui'})
     }
     
 }
