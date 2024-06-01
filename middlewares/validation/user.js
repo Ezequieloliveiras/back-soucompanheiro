@@ -5,48 +5,48 @@ exports.validateUserSingUp = [
         .trim()
         .not()
         .isEmpty()
-        .withMessage('Name is required! teste')
+        .withMessage('O nome é obrigatório!')
         .isString()
-        .withMessage('Must be a valid name!')
+        .withMessage('Deve ser um nome válido!')
         .isLength({ min: 3, max: 20 }).
-        withMessage('Name must be within 3 to 20 character'),
+        withMessage('O nome deve ter de 3 a 20 caracteres!'),
     check('email')
         .normalizeEmail()
-        .isEmail().withMessage('Invalid email!'),
+        .isEmail().withMessage('E-mail inválido!'),
     check('password')
         .trim()
         .not()
         .isEmpty()
-        .withMessage('Password is empty!')
+        .withMessage('O campo senha está vazia!')
         .isLength({ min: 8, max: 20 }).
-        withMessage('Password must be within 8 to 20 characters long'),
+        withMessage(' A senha deve ter de 8 a 20 caracteres'),
     check('confirmPassword')
         .trim()
         .not()
         .isEmpty()
         .custom((value, { req }) => {
             if (value !== req.body.password) {
-                throw new Error('Both password must be same!')
+                throw new Error('Ambas as senhas devem ser iguais!')
             }
             return true
         })
 ]
 
-exports.userValidation = (req,res, next) => {
-   const result = validationResult(req).array()
-    if(!result.length) return next()
+exports.userValidation = (req, res, next) => {
+    const result = validationResult(req).array()
+    if (!result.length) return next()
 
-        const error = result[0].msg
-        res.json({success: false, message: error})
+    const error = result[0].msg
+    res.json({ success: false, message: error })
 }
 
 exports.validateUserSingIn = [
 
-    check('email').trim().isEmail().withMessage('email / password is required!'),
+    check('email').trim().isEmail().withMessage('e-mail/senha é obrigatório!'),
 
     check('password')
-    .trim()
-    .not()
-    .isEmpty()
-    .withMessage('email / password is required!')
+        .trim()
+        .not()
+        .isEmpty()
+        .withMessage('e-mail/senha é obrigatório!')
 ]
