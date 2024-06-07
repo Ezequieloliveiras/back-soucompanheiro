@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    avatar: Buffer, // para armazenar a imagem do avatar do usuário como dados binários (Buffer).
+    avatar: String, // para armazenar a imagem do avatar do usuário como dados binários (Buffer).
 
 })
 
