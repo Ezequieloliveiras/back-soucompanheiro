@@ -9,20 +9,39 @@ const userRouter = require('./routes/route') // define as rotas (endpoints) rela
 
 const app = express() // Cria uma instância do express. está inicializando o aplicativo express, que será usado para configurar e iniciar o servidor web.
 
-app.use(cors()) // Permite todas as origens
+
+const allowedOrigins = [
+  'https://auraeventos.netlify.app',
+  'https://like-api-restfull.onrender.com',
+  'http://localhost:8000',
+  'http://127.0.0.1:8000',
+  'http://192.168.0.4:8000',
+  ]
+
+
+app.use(cors({
+  origin: function(origin, callback) {
+    let allowed = true
+
+    if(!origin) allowed = true // aplicativo de celular
+
+    if(!allowedOrigins.includes(origin)) allowed = false
+
+    callback(null, allowed)
+  }
+})) // Permite todas as origens
 app.use(express.json()) // Diz ao aplicativo express para usar um middleware que transforma o corpo das requisições em JSON.
 
 app.use(userRouter) // Diz ao aplicativo express para usar o roteador userRouter para lidar com requisições
 
-const PORT = process.env.PORT || 8002 // Porta definida para 8002
-
-app.get('/test', (req, res) => {
-  res.send('Hello World!')
-})
 
 app.get('/', (req, res) => {
   res.json({ success: true, message: 'Welcome to backend zone!' })
 })
+
+
+
+const PORT = process.env.PORT || 8002 // Porta definida para 8002
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`)

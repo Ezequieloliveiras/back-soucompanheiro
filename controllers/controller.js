@@ -46,19 +46,24 @@ exports.userSignIn = async (req, res) => {
 
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' })
 
-  res.json({ success: true, user: user, token })
+  const userInfo = {
+    fullname: user.fullname,
+    email: user.email,
+    avatar: user.avatar ? user.avatar : '',
+  }
+
+
+  res.json({ success: true, user: userInfo, token })
 }
+
+
+
 
 exports.uploadProfile = async (req, res) => {
   const { user } = req
   if (!user) return res
     .status(401)
     .json({ success: false, message: 'Acesso não autorizado!' })
-
-
-
-
-
 
   try {
 
