@@ -26,6 +26,17 @@ router.post('/create-user', validateUserSingUp, userValidation, createUser) // V
 router.post('/sign-in', validateUserSingIn, userValidation, userSignIn) // Valida os dados de login com validateUserSingIn e userValidation. Realiza o login usando a função userSignIn
 router.post('/upload-profile', isAuth, uploads.single('profile'), uploadProfile)// Verifica se o usuário está autenticado com isAuth.
 router.post('/sign-out', isAuth, signOut)
-
+router.get('/profile', isAuth, (req, res) => {
+    if(!req.user)
+        return res.json({success: false, message: 'unauthorized access!'})
+    res.json({
+        success: true,
+        profile: {
+            fullname: req.user.fullname,
+            email: req.user.email,
+            avatar: req.user.avatar ? req.user.avatar: '',
+        }
+    })
+})
 
 module.exports = router
