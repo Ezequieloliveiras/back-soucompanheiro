@@ -25,7 +25,7 @@ router.get('/list-users', userSignIn) //  lista o usuario
 router.post('/create-user', validateUserSingUp, userValidation, createUser) // Valida os dados do usuário com validateUserSingUp e userValidation. Cria o usuário usando a função createUser.
 router.post('/sign-in', validateUserSingIn, userValidation, userSignIn) // Valida os dados de login com validateUserSingIn e userValidation. Realiza o login usando a função userSignIn
 router.post('/upload-profile', isAuth, uploads.single('profile'), uploadProfile)// Verifica se o usuário está autenticado com isAuth.
-router.post('/sign-out', isAuth, signOut)
+router.get('/sign-out', isAuth, signOut)
 router.get('/profile', isAuth, (req, res) => {
     if(!req.user)
         return res.json({success: false, message: 'unauthorized access!'})
