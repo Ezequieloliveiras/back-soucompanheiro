@@ -11,10 +11,9 @@ const app = express() // Cria uma instância do express. está inicializando o a
 
 
 const allowedOrigins = [
-  'https://auraeventos.netlify.app',
-  'https://like-api-restfull.onrender.com',
-  'http://localhost:8000',
-  'http://127.0.0.1:8000',
+  'http://localhost:8002',
+  'http://127.0.0.1:8001',
+  'http://192.168.0.4:8081',
   'http://192.168.0.4:8000',
   ]
 

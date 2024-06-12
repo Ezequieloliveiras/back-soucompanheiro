@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
         required: true,
     },
     avatar: String, // para armazenar a imagem do avatar do usuário como dados binários (Buffer).
-
+    tokens: [{type: Object}]
 })
 
 // Middleware de Pré-Save para Criptografar Senhas

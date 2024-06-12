@@ -46,6 +46,21 @@ exports.userSignIn = async (req, res) => {
 
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' })
 
+
+  let oldTokens = user.tokens || [] // verificando se existe token
+
+  if (oldTokens.length) { //se existir usaremos esse filtro
+    oldTokens = oldTokens.filter(t => {
+      const timeDiff = (Date.now() - parseInt(t.signedAt)) / 1000
+      if (timeDiff < 86400) { // 24h em segundos
+        return t
+      }
+    })
+  }
+
+  await User.findByIdAndUpdate(user._id, { tokens: [...oldTokens, { token, signedAt: Date.now().toString() }] })
+
+
   const userInfo = {
     fullname: user.fullname,
     email: user.email,
@@ -53,10 +68,8 @@ exports.userSignIn = async (req, res) => {
   }
 
 
-  res.json({ success: true, user: userInfo, token })
+  res.json({ success: true, user: userInfo, token }) // enviando para o frontend
 }
-
-
 
 
 exports.uploadProfile = async (req, res) => {
@@ -82,4 +95,21 @@ exports.uploadProfile = async (req, res) => {
   }
 
 
+}
+
+exports.signOut = async (req, res) => {
+  if (req.headers && req.headers.authorization) {
+    const token = req.headers.authorization.split(' ')[1]
+
+    if (!token) {
+      return res.status(401).json({ success: false, message: 'Autorização falhou!' })
+    }
+
+    const tokens = req.user.tokens
+
+    const newTokens = tokens.filter(t => t.token !== token)
+
+    await User.findByIdAndUpdate(req.user._id, { tokens: newTokens })
+    res.json({ success: true, message: 'Sign out successfully!' })
+  }
 }
