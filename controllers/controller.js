@@ -71,7 +71,6 @@ exports.userSignIn = async (req, res) => {
   res.json({ success: true, user: userInfo, token }) // enviando para o frontend
 }
 
-
 exports.uploadProfile = async (req, res) => {
   const { user } = req
   if (!user) return res
@@ -111,5 +110,24 @@ exports.signOut = async (req, res) => {
 
     await User.findByIdAndUpdate(req.user._id, { tokens: newTokens })
     res.json({ success: true, message: 'Sign out successfully!' })
+  }
+}
+
+exports.listUsers = async (req, res) => {
+  
+  try {
+      const users = await User.find({}, 'fullname email')
+      res.json({
+        success: true,
+        user:users
+      })
+
+
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: 'Erro ao buscar usuários',
+      error: error.message
+    })
   }
 }
