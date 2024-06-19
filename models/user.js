@@ -20,11 +20,11 @@ const userSchema = new mongoose.Schema({
     tokens: [{type: Object}],
     estado: {
         type: String,
-        required: true
+        required: false
     },
     cidade: {
         type: String,
-        required: true
+        required: false
     }
 })
 
