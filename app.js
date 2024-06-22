@@ -1,8 +1,10 @@
 require('dotenv').config()
-const cron = require('node-cron')
-const express = require('express')
-const bodyParser = require('body-parser')
-const { validationHeader } = require('./src/middlewares/validate')
+const cron = require('node-cron');
+const express = require('express');
+const bodyParser = require('body-parser');
+const { validationHeader } = require('./src/middlewares/validate');
+const { isAuth } = require('./src/middlewares/auth');
+
 require('./src/config/database')()
 
 const app = express()
@@ -15,7 +17,7 @@ const userRoutes = require('./src/routes/user.routes')
 app.use('/api/users', userRoutes)
 
 const jobRoutes = require('./src/routes/job.routes')
-app.use('/api/jobs', jobRoutes)
+app.use('/api/jobs', isAuth, jobRoutes)
 
 //catch 404 and forward to error handler
 app.use(function (req, res, next) {
