@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const User = require('../models/user')
+const User = require('../models/user.model')
 const sharp = require('sharp')
 const cloudinary = require('../helper/imageUpload')
 
@@ -28,6 +28,7 @@ exports.createUser = async (req, res) => {
 }
 
 exports.userSignIn = async (req, res) => {
+  console.log('userSignIn')
   const { email, password } = req.body
   const user = await User.findOne({ email })
 
@@ -124,10 +125,36 @@ exports.listUsers = async (req, res) => {
 
 
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       succes: false,
       message: 'Erro ao buscar usuários',
       error: error.message
     })
   }
+}
+
+exports.associateStateCity = async (req, res) => {
+    console.log('post')
+    try {
+        const { userId, estado, cidade } = req.body;
+        console.log(estado)
+        console.log(cidade)
+        console.log(userId)
+
+        const updatedUser = await User.findByIdAndUpdate(
+            { _id: userId },
+            { estado, cidade},
+            { new: true } // Retorna o documento atualizado
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ success: false, message: 'Usuário não encontrado.' });
+        }
+
+        res.status(200).json({ success: true, message: 'Estado e cidade associados com sucesso!' });
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ success: false, message: 'Erro ao associar estado e cidade.' });
+    }
 }
