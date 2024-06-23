@@ -98,30 +98,38 @@ exports.uploadProfile = async (req, res) => {
 }
 
 exports.signOut = async (req, res) => {
-  if (req.headers && req.headers.authorization) {
-    const token = req.headers.authorization.split(' ')[1]
+  try {
+    return res.json({ success: true, message: 'Sign out successfully!' })
+    //console.log(req.headers)
+    if (req.headers && req.headers.authorization) {
+      const token = req.headers.authorization.split(' ')[1]
+      console.log(token)
+      if (!token) {
+        return res.status(401).json({ success: false, message: 'Autorização falhou!' })
+      }
 
-    if (!token) {
-      return res.status(401).json({ success: false, message: 'Autorização falhou!' })
+      console.log(req.user)
+      const tokens = req.user.tokens
+
+      const newTokens = tokens.filter(t => t.token !== token)
+
+      console.log(newTokens)
+      await User.findByIdAndUpdate(req.user._id, { tokens: newTokens })
+      res.json({ success: true, message: 'Sign out successfully!' })
     }
-
-    const tokens = req.user.tokens
-
-    const newTokens = tokens.filter(t => t.token !== token)
-
-    await User.findByIdAndUpdate(req.user._id, { tokens: newTokens })
-    res.json({ success: true, message: 'Sign out successfully!' })
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Erro no servidor, tente depois de algum tempo' })
   }
 }
 
 exports.listUsers = async (req, res) => {
-  
+
   try {
-      const users = await User.find({}, 'fullname email avatar')
-      res.json({
-        success: true,
-        user:users
-      })
+    const users = await User.find({}, 'fullname email avatar')
+    res.json({
+      success: true,
+      user: users
+    })
 
 
   } catch (error) {
@@ -135,26 +143,26 @@ exports.listUsers = async (req, res) => {
 }
 
 exports.associateStateCity = async (req, res) => {
-    console.log('post')
-    try {
-        const { userId, estado, cidade } = req.body;
-        console.log(estado)
-        console.log(cidade)
-        console.log(userId)
+  console.log('post')
+  try {
+    const { userId, estado, cidade } = req.body;
+    console.log(estado)
+    console.log(cidade)
+    console.log(userId)
 
-        const updatedUser = await User.findByIdAndUpdate(
-            { _id: userId },
-            { estado, cidade},
-            { new: true } // Retorna o documento atualizado
-        );
+    const updatedUser = await User.findByIdAndUpdate(
+      { _id: userId },
+      { estado, cidade },
+      { new: true } // Retorna o documento atualizado
+    );
 
-        if (!updatedUser) {
-            return res.status(404).json({ success: false, message: 'Usuário não encontrado.' });
-        }
-
-        res.status(200).json({ success: true, message: 'Estado e cidade associados com sucesso!' });
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({ success: false, message: 'Erro ao associar estado e cidade.' });
+    if (!updatedUser) {
+      return res.status(404).json({ success: false, message: 'Usuário não encontrado.' });
     }
+
+    res.status(200).json({ success: true, message: 'Estado e cidade associados com sucesso!' });
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ success: false, message: 'Erro ao associar estado e cidade.' });
+  }
 }
