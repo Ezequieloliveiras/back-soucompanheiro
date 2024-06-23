@@ -117,7 +117,7 @@ exports.signOut = async (req, res) => {
 exports.listUsers = async (req, res) => {
   
   try {
-      const users = await User.find({}, 'fullname email')
+      const users = await User.find({}, 'fullname email avatar')
       res.json({
         success: true,
         user:users
