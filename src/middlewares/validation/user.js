@@ -33,7 +33,11 @@ exports.validateUserSingUp = [
                 throw new Error('Ambas as senhas devem ser iguais!')
             }
             return true
-        })
+        }),
+        check('option')
+        .trim()
+        .notEmpty().withMessage('Selecione uma opção!')
+        .isIn(['PrecisoDeTrabalho', 'PrecisoDeCompanheiro']).withMessage('A opção deve ser "Preciso de trabalho" ou "Preciso de companheiro"'),
 ]
 
 exports.userValidation = (req, res, next) => {

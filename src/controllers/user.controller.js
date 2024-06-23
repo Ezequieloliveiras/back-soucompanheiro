@@ -4,27 +4,33 @@ const sharp = require('sharp')
 const cloudinary = require('../helper/imageUpload')
 
 exports.createUser = async (req, res) => {
+  try {
 
-  const { fullname, email, password } = req.body
-  const isNewuser = await User.isThisEmailInUse(email)
+    const { fullname, email, password, option } = req.body
+    const isNewuser = await User.isThisEmailInUse(email)
 
-  if (!isNewuser) return res.json({
-    success: false,
-    message: 'Este e-mail já está em uso, tente fazer login'
-  })
+    if (!isNewuser) return res.json({
+      success: false,
+      message: 'Este e-mail já está em uso, tente fazer login'
+    })
 
-  const user = await User({
-    fullname,
-    email,
-    password,
-  })
-  await user.save(user)
-  res.json({
-    success: true,
-    message: 'Conta criada com sucesso!',
-    user
-  })
+    const user = await User({
+      fullname,
+      email,
+      password,
+      option
+    })
+    await user.save(user)
+    res.json({
+      success: true,
+      message: 'Conta criada com sucesso!',
+      user
+    })
+    console.log(user.res + 'user')
 
+  } catch (error) {
+
+  }
 }
 
 exports.userSignIn = async (req, res) => {

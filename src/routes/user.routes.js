@@ -17,6 +17,11 @@ const uploads = multer({ storage, fileFilter })
 
 router.get('/', userController.listUsers)
 router.post('/create-user', validateUserSingUp, userValidation, userController.createUser)
+console.log(validateUserSingIn) 
+
+
+
+
 router.post('/sign-in', validateUserSingIn, userValidation, userController.userSignIn)
 router.post('/upload-profile', uploads.single('profile'), userController.uploadProfile)
 router.get('/sign-out', userController.signOut)

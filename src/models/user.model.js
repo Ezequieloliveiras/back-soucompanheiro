@@ -25,7 +25,12 @@ const userSchema = new mongoose.Schema({
     cidade: {
         type: String,
         required: false
-    }
+    },
+    option: {
+        type: String,
+        required: true,
+        enum: ['PrecisoDeTrabalho', 'PrecisoDeCompanheiro']
+      }
 })
 
 // Middleware de Pré-Save para Criptografar Senhas
