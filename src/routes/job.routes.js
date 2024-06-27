@@ -1,8 +1,10 @@
 const express = require('express');
 const jobController = require('../controllers/job.controller');
 const router = express.Router();
+const { isAuth } = require('../middlewares/auth');
 
-router.get('/', jobController.listJob)
+
+router.get('/', isAuth, jobController.listJob)
 
 // router.post('/job', jobController.createJob)
 // router.put('/job', jobController.updateJob)

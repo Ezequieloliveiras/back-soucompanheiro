@@ -105,7 +105,7 @@ exports.uploadProfile = async (req, res) => {
 
 exports.signOut = async (req, res) => {
   try {
-    return res.json({ success: true, message: 'Sign out successfully!' })
+    // return res.json({ success: true, message: 'Sign out successfully!' })
     //console.log(req.headers)
     if (req.headers && req.headers.authorization) {
       const token = req.headers.authorization.split(' ')[1]

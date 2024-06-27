@@ -3,7 +3,6 @@ const cron = require('node-cron');
 const express = require('express');
 const bodyParser = require('body-parser');
 const { validationHeader } = require('./src/middlewares/validate');
-const { isAuth } = require('./src/middlewares/auth');
 
 require('./src/config/database')()
 
@@ -17,7 +16,7 @@ const userRoutes = require('./src/routes/user.routes')
 app.use('/api/users', userRoutes)
 
 const jobRoutes = require('./src/routes/job.routes')
-app.use('/api/jobs', isAuth, jobRoutes)
+app.use('/api/jobs', jobRoutes)
 
 //catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -32,6 +31,14 @@ app.use(function (err, req, res, next) {
     message: "Error Message"
   })
 })
+
+process.on('uncaughtException', (error, origin) => {
+  console.log(`\n${origin} signal received. \n${error}`);
+});
+
+process.on('unhandledRejection', (error) => {
+  console.log(`\nunhandledRejection signal received. \n${error}`);
+});
 
 const PORT = process.env.PORT || 8002
 app.listen(PORT, () => {
